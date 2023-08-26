@@ -13,6 +13,8 @@ import {
 import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 import { BookingService } from './booking.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
+import { Role } from 'src/user/entities/role.enum';
+import { Roles } from 'src/user/roles.decorator';
 // import { UpdateBookingDto } from './dto/update-booking.dto';
 
 @Controller('booking')
@@ -34,11 +36,15 @@ export class BookingController {
     );
   }
 
+  @Roles(Role.ADMIN_MANAGEMENT || Role.ADMIN_INVENTORY)
+  @UseGuards(AuthenticatedGuard)
   @Get(':vehicleId')
   findAll(@Param('vehicleId') vehicleId: number) {
     return this.bookingService.findAll(Number(vehicleId));
   }
 
+  @Roles(Role.ADMIN_MANAGEMENT || Role.ADMIN_INVENTORY)
+  @UseGuards(AuthenticatedGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.bookingService.findOne(+id);
@@ -49,6 +55,8 @@ export class BookingController {
   //   return this.bookingService.update(+id, updateBookingDto);
   // }
 
+  @Roles(Role.ADMIN_MANAGEMENT || Role.ADMIN_INVENTORY)
+  @UseGuards(AuthenticatedGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.bookingService.remove(Number(id));

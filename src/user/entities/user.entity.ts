@@ -1,6 +1,7 @@
 import { Booking } from 'src/booking/entities/booking.entity';
 import { Vehicle } from 'src/vehicle/entities/vehicle.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Role } from './role.enum';
 
 @Entity()
 export class User {
@@ -15,6 +16,9 @@ export class User {
 
   @Column()
   password: string;
+
+  @Column('text', { array: true, default: [Role.USER] })
+  roles: string[];
 
   @OneToMany(() => Booking, (booking) => booking.user)
   booking: Booking[];
