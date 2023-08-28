@@ -15,14 +15,26 @@ import { BookingService } from './booking.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { Role } from 'src/user/entities/role.enum';
 import { Roles } from 'src/user/roles.decorator';
+import {
+  ApiBadRequestResponse,
+  ApiCreatedResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { Booking } from './entities/booking.entity';
 // import { UpdateBookingDto } from './dto/update-booking.dto';
 
+@ApiTags('Bookings')
 @Controller('booking')
 export class BookingController {
   constructor(private readonly bookingService: BookingService) {}
 
   @UseGuards(AuthenticatedGuard)
   @Post(':userId/:vehicleId')
+  @ApiCreatedResponse({
+    description: 'returns the booking object',
+    type: Booking,
+  })
+  @ApiBadRequestResponse({ description: 'loggin before using this resource' })
   create(
     @Request() req,
     @Body(ValidationPipe) createBookingDto: CreateBookingDto,
@@ -39,6 +51,11 @@ export class BookingController {
   @Roles(Role.ADMIN_MANAGEMENT || Role.ADMIN_INVENTORY)
   @UseGuards(AuthenticatedGuard)
   @Get(':vehicleId')
+  @ApiCreatedResponse({
+    description: 'returns all the booking made with vehicle id as an array',
+    type: [Booking],
+  })
+  @ApiBadRequestResponse({ description: 'loggin before using this resource' })
   findAll(@Param('vehicleId') vehicleId: number) {
     return this.bookingService.findAll(Number(vehicleId));
   }
@@ -46,6 +63,11 @@ export class BookingController {
   @Roles(Role.ADMIN_MANAGEMENT || Role.ADMIN_INVENTORY)
   @UseGuards(AuthenticatedGuard)
   @Get(':id')
+  @ApiCreatedResponse({
+    description: 'returns the booking with the provided booking id',
+    type: Booking,
+  })
+  @ApiBadRequestResponse({ description: 'loggin before using this resource' })
   findOne(@Param('id') id: string) {
     return this.bookingService.findOne(+id);
   }
@@ -58,6 +80,12 @@ export class BookingController {
   @Roles(Role.ADMIN_MANAGEMENT || Role.ADMIN_INVENTORY)
   @UseGuards(AuthenticatedGuard)
   @Delete(':id')
+  @ApiCreatedResponse({
+    description:
+      'deletes and returns the booking object with booking id provided',
+    type: Booking,
+  })
+  @ApiBadRequestResponse({ description: 'loggin before using this resource' })
   remove(@Param('id') id: string) {
     return this.bookingService.remove(Number(id));
   }
