@@ -5,12 +5,12 @@ import { AuthenticatedGuard } from './auth/authenticated.guard';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Authentication')
-@Controller('Auth')
+@Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @UseGuards(LocalAuthGuard)
-  @Post('login')
+  @Post('/login')
   login(): any {
     return { msg: 'logged In !!!' };
   }
