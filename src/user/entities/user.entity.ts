@@ -3,6 +3,7 @@ import { Vehicle } from 'src/vehicle/entities/vehicle.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Role } from './role.enum';
 import { ApiProperty } from '@nestjs/swagger';
+import * as bcrypt from 'bcrypt';
 
 @Entity()
 export class User {
@@ -37,4 +38,8 @@ export class User {
 
   @OneToMany(() => Vehicle, (vehicle) => vehicle.user)
   vehicles: Vehicle[];
+
+  async validatePassword(password: string): Promise<boolean> {
+    return bcrypt.compare(password, this.password);
+  }
 }

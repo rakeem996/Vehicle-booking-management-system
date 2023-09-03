@@ -10,7 +10,7 @@ import {
   ValidationPipe,
   Request,
 } from '@nestjs/common';
-import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
+// import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 import { BookingService } from './booking.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { Role } from 'src/user/entities/role.enum';
@@ -28,7 +28,6 @@ import { Booking } from './entities/booking.entity';
 export class BookingController {
   constructor(private readonly bookingService: BookingService) {}
 
-  @UseGuards(AuthenticatedGuard)
   @Post(':userId/:vehicleId')
   @ApiCreatedResponse({
     description: 'returns the booking object',
@@ -49,7 +48,6 @@ export class BookingController {
   }
 
   @Roles(Role.ADMIN_MANAGEMENT || Role.ADMIN_INVENTORY)
-  @UseGuards(AuthenticatedGuard)
   @Get(':vehicleId')
   @ApiCreatedResponse({
     description: 'returns all the booking made with vehicle id as an array',
@@ -61,7 +59,6 @@ export class BookingController {
   }
 
   @Roles(Role.ADMIN_MANAGEMENT || Role.ADMIN_INVENTORY)
-  @UseGuards(AuthenticatedGuard)
   @Get(':id')
   @ApiCreatedResponse({
     description: 'returns the booking with the provided booking id',
@@ -78,7 +75,6 @@ export class BookingController {
   // }
 
   @Roles(Role.ADMIN_MANAGEMENT || Role.ADMIN_INVENTORY)
-  @UseGuards(AuthenticatedGuard)
   @Delete(':id')
   @ApiCreatedResponse({
     description:

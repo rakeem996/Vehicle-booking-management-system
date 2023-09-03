@@ -24,6 +24,6 @@ export class CreateUserDto {
     example: 'user@123',
   })
   @IsString()
-  @MinLength(8)
+  // @MinLength(8)
   password: string;
 }

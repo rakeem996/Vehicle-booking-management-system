@@ -15,7 +15,7 @@ const config = {
   migrations: ['dist/migrations/*{.ts,.js}'],
   autoLoadEntities: true,
   synchronize: false,
-  loggin: true,
+  loggin: true, 
 };
 
 export default registerAs('typeorm', () => config);
