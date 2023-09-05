@@ -12,17 +12,20 @@ import {
 // import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 import { VehicleService } from './vehicle.service';
 import { CreateVehicleDto } from './dto/create-vehicle.dto';
-import { Role } from 'src/user/entities/role.enum';
-import { Roles } from 'src/user/roles.decorator';
+import { Role } from 'src/enums/role.enum';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { Vehicle } from './entities/vehicle.entity';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 
 @ApiTags('Vehicle')
 @Controller('vehicle')
 export class VehicleController {
   constructor(private readonly vehicleService: VehicleService) {}
 
-  @Roles(Role.ADMIN_INVENTORY)
+  @Roles(Role.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post(':userId')
   @ApiCreatedResponse({
     description: 'it returns a object of vehicle created',
@@ -30,19 +33,20 @@ export class VehicleController {
   })
   create(
     @Body(ValidationPipe) createVehicleDto: CreateVehicleDto,
-    @Param('userId') userId: number,
+    @Param('userId') userId: string,
   ) {
-    return this.vehicleService.create(createVehicleDto, Number(userId));
+    return this.vehicleService.create(createVehicleDto, userId);
   }
 
-  @Roles(Role.ADMIN_INVENTORY)
+  @Roles(Role.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get(':userId')
   @ApiCreatedResponse({
     description: 'it returns array of object of all vehicles with user id: id',
     type: [Vehicle],
   })
-  findAll(@Param('userId') userId: number) {
-    return this.vehicleService.findAll(Number(userId));
+  findAll(@Param('userId') userId: string) {
+    return this.vehicleService.findAll(userId);
   }
 
   // @Get(':id')
@@ -55,7 +59,8 @@ export class VehicleController {
   //   return this.vehicleService.update(+id, updateVehicleDto);
   // }
 
-  @Roles(Role.ADMIN_INVENTORY)
+  @Roles(Role.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete(':id')
   @ApiCreatedResponse({
     description: 'it returns a object of vehicle deleted',

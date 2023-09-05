@@ -13,14 +13,16 @@ import {
 // import { AuthenticatedGuard } from 'src/auth/authenticated.guard';
 import { BookingService } from './booking.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
-import { Role } from 'src/user/entities/role.enum';
-import { Roles } from 'src/user/roles.decorator';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/enums/role.enum';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { Booking } from './entities/booking.entity';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 // import { UpdateBookingDto } from './dto/update-booking.dto';
 
 @ApiTags('Bookings')
@@ -29,25 +31,30 @@ export class BookingController {
   constructor(private readonly bookingService: BookingService) {}
 
   @Post(':userId/:vehicleId')
+
   @ApiCreatedResponse({
     description: 'returns the booking object',
     type: Booking,
   })
   @ApiBadRequestResponse({ description: 'loggin before using this resource' })
+  
+  @Roles(Role.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   create(
     @Request() req,
     @Body(ValidationPipe) createBookingDto: CreateBookingDto,
     @Param('vehicleId') vehicleId: number,
-    @Param('userId') userId: number,
+    @Param('userId') userId: string,
   ) {
     return this.bookingService.create(
       createBookingDto,
       Number(vehicleId),
-      Number(userId),
+      userId,
     );
   }
 
-  @Roles(Role.ADMIN_MANAGEMENT || Role.ADMIN_INVENTORY)
+  @Roles(Role.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get(':vehicleId')
   @ApiCreatedResponse({
     description: 'returns all the booking made with vehicle id as an array',
@@ -58,7 +65,8 @@ export class BookingController {
     return this.bookingService.findAll(Number(vehicleId));
   }
 
-  @Roles(Role.ADMIN_MANAGEMENT || Role.ADMIN_INVENTORY)
+  @Roles(Role.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get(':id')
   @ApiCreatedResponse({
     description: 'returns the booking with the provided booking id',
@@ -74,7 +82,8 @@ export class BookingController {
   //   return this.bookingService.update(+id, updateBookingDto);
   // }
 
-  @Roles(Role.ADMIN_MANAGEMENT || Role.ADMIN_INVENTORY)
+  @Roles(Role.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete(':id')
   @ApiCreatedResponse({
     description:

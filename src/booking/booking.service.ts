@@ -19,11 +19,11 @@ export class BookingService {
   async create(
     createBookingDto: CreateBookingDto,
     vehicleId: number,
-    userId: number,
+    userId: string,
   ) {
     const booking: Booking = new Booking();
     booking.bookingDate = new Date().toLocaleDateString();
-    booking.user = await this.userService.findOne(userId);
+    booking.user = await this.userService.findOneId(userId);
     booking.vehicle = await this.vehicleService.findOne(vehicleId);
 
     return this.bookingRepository.save(booking);

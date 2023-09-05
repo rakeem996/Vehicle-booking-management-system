@@ -14,19 +14,19 @@ export class VehicleService {
     private userService: UserService,
   ) {}
 
-  async create(createVehicleDto: CreateVehicleDto, userId: number) {
+  async create(createVehicleDto: CreateVehicleDto, userId: string) {
     const vehicle: Vehicle = new Vehicle();
-    vehicle.user = await this.userService.findOne(userId);
+    vehicle.user = await this.userService.findOneId(userId);
     vehicle.wheels = createVehicleDto.wheel;
     vehicle.vehicleType = createVehicleDto.vehicleType;
     vehicle.vehicleModel = createVehicleDto.vehicleModel;
     return this.vehicleRepository.save(vehicle);
   }
 
-  findAll(userId: number) {
+  findAll(userId: string) {
     return this.vehicleRepository.find({
       relations: ['user'],
-      where: { id: userId },
+      where: { id: Number(userId) },
     });
   }
 
