@@ -52,7 +52,7 @@ export class Vehicle {
         name: 'user5',
         username: 'user5',
         password: '123',
-        roles: ['admin-manage', 'admin-inventory'],
+        roles: ['admin'],
       },
     },
   })
