@@ -23,7 +23,6 @@ import { User } from './entities/user.entity';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 
-
 @ApiTags('User')
 @Controller('user')
 export class UserController {
@@ -42,7 +41,7 @@ export class UserController {
   @Get('all')
   @ApiCreatedResponse({
     description: 'find the array of all user objects',
-    type: User,
+    type: [User],
   })
   @ApiBadRequestResponse({
     description: 'cannot access this part of site with your role',

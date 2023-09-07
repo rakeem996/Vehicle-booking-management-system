@@ -6,7 +6,7 @@ dotenvConfig({ path: '.env' });
 
 const config = {
   type: `${process.env.DB_TYPE}`,
-  host: `${process.env.POSTGRES_HOST}`,
+  host: `localhost`,
   port: `${process.env.POSTGRES_PORT}`,
   username: `${process.env.DATABASE_USER}`,
   password: `${process.env.DATABASE_PASSWORD}`,
