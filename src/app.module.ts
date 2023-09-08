@@ -9,6 +9,8 @@ import { APP_GUARD } from '@nestjs/core';
 import typeorm from './config/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -26,8 +28,9 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
     BookingModule,
     AuthModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [
+    AppService,
     // {
     //   provide: APP_GUARD,
     //   useClass: JwtAuthGuard,
